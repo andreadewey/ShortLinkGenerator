@@ -12,8 +12,8 @@ class LinkCreator extends WireData implements Module
 	public static function getModuleInfo()
 	{
 		return array(
-			'title'     => 'Short Link Creator',
-			'version'   => 001,
+			'title'     => 'Short Link Generator',
+			'version'   => 002,
 			'summary'   => 'Creates short URLs when a page is saved',
 			'permanent' => false,
 			'singular'  => true,
