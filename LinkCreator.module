@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * LinkCreator
+ *
+ * Creates a short url when a page is saved
+ *
+ *
+ **/
+class LinkCreator extends WireData implements Module
+{
+	public static function getModuleInfo()
+	{
+		return array(
+			'title'     => 'Short Link Creator',
+			'version'   => 001,
+			'summary'   => 'Creates short URLs when a page is saved',
+			'permanent' => false,
+			'singular'  => true,
+			'autoload'  => true,
+			'author'    => 'Rizsti',
+			'requires'  => 'LinkShortener',
+			);
+	}
+
+
+	/**
+	 * Initialize hooks
+	 */
+	public function init()
+	{
+		$this->pages->addHookAfter('save', $this, 'createLink'); 
+	}
+
+	/**
+	 * createLink hooks into the pages->save method and creates a new short url if an existing one is not found
+	 *
+	 */
+	public function createLink($event) {
+		$page = $event->arguments[0]; 
+		$full = $page->url;
+		$template = $page->template;
+		if ($template != "LinkShortener" && file_exists($template->filename)){
+			$l = wire()->pages->get("template=LinkShortener,full_link=$full");
+			if($l instanceof NullPage)
+				LinkShortener::addNewLink( $full, null );
+		}
+	}
+}
